@@ -77,6 +77,11 @@ button:hover{
 .low{
     border-left-color:green;
 }
+
+a{
+    color:blue;
+    text-decoration:none;
+}
 </style>
 </head>
 
@@ -127,18 +132,28 @@ button:hover{
 const form = document.getElementById("alertForm");
 const alertList = document.getElementById("alertList");
 
+let latitude = "Not Available";
+let longitude = "Not Available";
+
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+        function(position) {
+            latitude = position.coords.latitude;
+            longitude = position.coords.longitude;
+        },
+        function() {
+            console.log("Location access denied");
+        }
+    );
+}
+
 form.addEventListener("submit", function(e){
 
     e.preventDefault();
 
-    const name =
-    document.getElementById("name").value;
-
-    const location =
-    document.getElementById("location").value;
-
-    const emergency =
-    document.getElementById("emergency").value;
+    const name = document.getElementById("name").value;
+    const location = document.getElementById("location").value;
+    const emergency = document.getElementById("emergency").value;
 
     let priority = "Medium";
     let className = "medium";
@@ -153,18 +168,25 @@ form.addEventListener("submit", function(e){
         className = "low";
     }
 
-    const alertBox =
-    document.createElement("div");
+    const currentTime = new Date().toLocaleString();
 
-    alertBox.className =
-    `alert ${className}`;
+    const alertBox = document.createElement("div");
+
+    alertBox.className = `alert ${className}`;
 
     alertBox.innerHTML = `
         <strong>Name:</strong> ${name}<br>
         <strong>Location:</strong> ${location}<br>
         <strong>Emergency:</strong> ${emergency}<br>
         <strong>Priority:</strong> ${priority}<br>
-        <strong>Status:</strong> Pending
+        <strong>Latitude:</strong> ${latitude}<br>
+        <strong>Longitude:</strong> ${longitude}<br>
+        <strong>Time:</strong> ${currentTime}<br>
+        <strong>Status:</strong> Pending<br><br>
+
+        <a href="https://www.google.com/maps?q=${latitude},${longitude}" target="_blank">
+        📍 View on Google Maps
+        </a>
     `;
 
     alertList.prepend(alertBox);
