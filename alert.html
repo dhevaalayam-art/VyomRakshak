@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VyomRakshak - Emergency Alert System</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f4f4;
+    margin:0;
+    padding:0;
+}
+
+header{
+    background:#d32f2f;
+    color:white;
+    text-align:center;
+    padding:20px;
+}
+
+.container{
+    width:80%;
+    margin:auto;
+    margin-top:20px;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+input, select{
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+    box-sizing:border-box;
+}
+
+button{
+    background:#d32f2f;
+    color:white;
+    border:none;
+    padding:12px;
+    width:100%;
+    cursor:pointer;
+    font-size:16px;
+}
+
+button:hover{
+    background:#b71c1c;
+}
+
+.alerts{
+    margin-top:30px;
+}
+
+.alert{
+    background:#fff3cd;
+    border-left:6px solid orange;
+    padding:10px;
+    margin-bottom:10px;
+    border-radius:5px;
+}
+
+.high{
+    border-left-color:red;
+}
+
+.medium{
+    border-left-color:orange;
+}
+
+.low{
+    border-left-color:green;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🚨 VyomRakshak</h1>
+    <p>Satellite-Assisted Emergency Communication System</p>
+</header>
+
+<div class="container">
+
+    <div class="card">
+
+        <h2>Send Emergency Alert</h2>
+
+        <form id="alertForm">
+
+            <input type="text" id="name"
+            placeholder="Enter Your Name" required>
+
+            <input type="text" id="location"
+            placeholder="Enter Location" required>
+
+            <select id="emergency">
+                <option value="Medical">Medical Emergency</option>
+                <option value="Fire">Fire</option>
+                <option value="Flood">Flood</option>
+                <option value="Earthquake">Earthquake</option>
+                <option value="Food">Food Shortage</option>
+            </select>
+
+            <button type="submit">SEND SOS</button>
+
+        </form>
+    </div>
+
+    <div class="alerts">
+        <h2>Rescue Dashboard</h2>
+
+        <div id="alertList"></div>
+    </div>
+
+</div>
+
+<script>
+
+const form = document.getElementById("alertForm");
+const alertList = document.getElementById("alertList");
+
+form.addEventListener("submit", function(e){
+
+    e.preventDefault();
+
+    const name =
+    document.getElementById("name").value;
+
+    const location =
+    document.getElementById("location").value;
+
+    const emergency =
+    document.getElementById("emergency").value;
+
+    let priority = "Medium";
+    let className = "medium";
+
+    if(emergency === "Medical" || emergency === "Fire"){
+        priority = "High";
+        className = "high";
+    }
+
+    if(emergency === "Food"){
+        priority = "Low";
+        className = "low";
+    }
+
+    const alertBox =
+    document.createElement("div");
+
+    alertBox.className =
+    `alert ${className}`;
+
+    alertBox.innerHTML = `
+        <strong>Name:</strong> ${name}<br>
+        <strong>Location:</strong> ${location}<br>
+        <strong>Emergency:</strong> ${emergency}<br>
+        <strong>Priority:</strong> ${priority}<br>
+        <strong>Status:</strong> Pending
+    `;
+
+    alertList.prepend(alertBox);
+
+    form.reset();
+});
+
+</script>
+
+</body>
+</html>
